@@ -1,0 +1,11 @@
+﻿@model List<string>
+@{
+    ViewBag.Title = "MostImportantTerms";
+}
+
+<h2>MostImportantTerms</h2>
+
+@foreach (var item in Model)
+{
+    @Html.Raw(item)
+}
