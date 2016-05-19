@@ -60,6 +60,7 @@
     <Compile Include="Entities\Document.cs" />
     <Compile Include="Entities\SourceType.cs" />
     <Compile Include="Entities\Tag.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="SearcheyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
