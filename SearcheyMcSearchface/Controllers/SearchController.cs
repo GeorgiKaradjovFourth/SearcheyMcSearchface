@@ -19,24 +19,16 @@ namespace SearcheyMcSearchface.Controllers
         // GET: Search/Text
         public ActionResult Search(string text)
         {
-            List<SearchResultViewModel> results = new List<SearchResultViewModel>();
-
-            List<string> tags = new List<string>();
-            tags.Add("Tag1");
-            tags.Add("Tag2");
-            tags.Add("Cool Tag");
-            SearchResultViewModel example = new SearchResultViewModel()
-            {
-                Header = "Text",
-                Text = "McTexty",
-                URL = "testUrl",
-                Tags = tags
-            };
-            results.Add(example);
+            var result = LuceneSearch.Search(text);
 
             SearchViewModel model = new SearchViewModel();
             model.Text = text;
-            model.Results = results;
+            model.Results = result.Select(s => new SearchResultViewModel
+            {
+                Text = s.Text,
+                Header = s.Header,
+                Source = s.Source
+            }).ToList();
 
             return PartialView("_Search", model);
         }

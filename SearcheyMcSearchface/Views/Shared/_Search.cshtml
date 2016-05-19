@@ -1,5 +1,4 @@
-﻿@using java.sql
-@model SearcheyMcSearchface.Models.SearchViewModel
+﻿@model SearcheyMcSearchface.Models.SearchViewModel
 
 <div id="search">
     @using (Ajax.BeginForm("Search", "Search", new AjaxOptions { UpdateTargetId = "search", HttpMethod = "GET"}))
