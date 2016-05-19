@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SearcheyMcSearchface.Models;
 
 namespace SearcheyMcSearchface.Controllers
 {
@@ -12,14 +13,32 @@ namespace SearcheyMcSearchface.Controllers
         [ChildActionOnly]
         public ActionResult Index()
         {
-            return View();
+            return PartialView();
         }
 
         // GET: Search/Text
-        [ChildActionOnly]
         public ActionResult Search(string text)
         {
-            return View();
+            List<SearchResultViewModel> results = new List<SearchResultViewModel>();
+
+            List<string> tags = new List<string>();
+            tags.Add("Tag1");
+            tags.Add("Tag2");
+            tags.Add("Cool Tag");
+            SearchResultViewModel example = new SearchResultViewModel()
+            {
+                Header = "Text",
+                Text = "McTexty",
+                URL = "testUrl",
+                Tags = tags
+            };
+            results.Add(example);
+
+            SearchViewModel model = new SearchViewModel();
+            model.Text = text;
+            model.Results = results;
+
+            return PartialView("_Search", model);
         }
     }
 }

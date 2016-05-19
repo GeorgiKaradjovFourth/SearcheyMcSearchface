@@ -9,6 +9,6 @@ namespace SearcheyMcSearchface.Models
     {
         public string Text { get; set; }
 
-        public List<SearchResult> Results { get; set; }
+        public List<SearchResultViewModel> Results { get; set; }
     }
 }

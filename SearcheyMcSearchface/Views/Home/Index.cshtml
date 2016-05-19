@@ -1,4 +1,5 @@
-﻿@{
+﻿@using SearcheyMcSearchface.Models
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -9,6 +10,7 @@
     </p>
 </div>
 
+@Html.Partial("_Search", new SearchViewModel())
 
 <div class="row">
     <div class="col-md-4">

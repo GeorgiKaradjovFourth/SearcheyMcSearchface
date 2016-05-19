@@ -1,0 +1,20 @@
+﻿@model SearcheyMcSearchface.Models.SearchResultViewModel
+
+<div>
+    <div class="caption">
+        Header: @Model.Header
+    </div>
+    <div class="caption">
+        Text: @Model.Text
+    </div>
+
+    <div class="row">
+        Tags:
+
+        @foreach (string tag in @Model.Tags)
+        {
+            <div class="col-sm-offset-1">@tag</div>
+        }
+    </div>
+    <br />
+</div>
