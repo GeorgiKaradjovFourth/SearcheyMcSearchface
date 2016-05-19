@@ -19,6 +19,9 @@ namespace SearcheyData
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
+            modelBuilder.Entity<Document>()
+                .HasMany(a => a.Tags)
+                .WithMany(t => t.Documents);
         }
 
         public DbSet<Document> Documents { get; set; }
