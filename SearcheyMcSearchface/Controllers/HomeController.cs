@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SearcheyData;
+using SearcheyData.Entities;
 
 namespace SearcheyMcSearchface.Controllers
 {
@@ -10,6 +12,9 @@ namespace SearcheyMcSearchface.Controllers
     {
         public ActionResult Index()
         {
+            var ctx = new SearcheyContext();
+            ctx.Documents.Add(new Document() {Header = "Test", Text = "Test Text"});
+            ctx.SaveChanges();
             return View();
         }
 
