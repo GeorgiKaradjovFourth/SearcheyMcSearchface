@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace SearcheyData.Entities
 {
-    class TagRelations
+    public class TagRelation
     {
+        public int Id { get; set; }
         public virtual Tag Tag1 { get; set; }
         public virtual Tag Tag2 { get; set; }
 

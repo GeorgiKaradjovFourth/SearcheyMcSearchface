@@ -103,13 +103,23 @@ namespace SearcheyMcSearchface.Controllers
 
         public ActionResult Colocations()
         {
-
             var ctx = new SearcheyContext();
             var col = LuceneSearch.AssosiationWithoutDistance();
             foreach (var colocation in col)
             {
-                var tag1 = ctx.Tags.Where(t => t.Text == colocation.Item1);
+                var tag1 = ctx.Tags.Where(t => t.Text == colocation.Item1).FirstOrDefault();
+                var tag2 = ctx.Tags.Where(t => t.Text == colocation.Item2).FirstOrDefault();
+                if (tag1 != null && tag2 != null)
+                {
+                    ctx.TagRelations.Add(new TagRelation
+                    {
+                        Tag1 = tag1,
+                        Tag2 = tag2,
+                        Relation = colocation.Item3
+                    });
+                }
             }
+            ctx.SaveChanges();
             return null;
         }
 

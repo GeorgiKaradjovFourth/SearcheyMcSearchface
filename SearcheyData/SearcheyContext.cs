@@ -26,5 +26,8 @@ namespace SearcheyData
 
         public DbSet<Document> Documents { get; set; }
         public DbSet<Tag> Tags { get; set; }
+
+        public DbSet<TagRelation> TagRelations{ get; set; }
+
     }
 }
