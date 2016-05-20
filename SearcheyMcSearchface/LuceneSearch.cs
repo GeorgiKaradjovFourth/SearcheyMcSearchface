@@ -16,7 +16,7 @@ using LuceneVersion = Lucene.Net.Util.Version;
 
 namespace SearcheyMcSearchface
 {
-    public class LuceneSearch
+    public static class LuceneSearch
     {
         private static string _luceneDir =
                 Path.Combine(HttpContext.Current.Request.PhysicalApplicationPath, "lucene_index");
@@ -231,38 +231,76 @@ namespace SearcheyMcSearchface
             return result;
         }
 
-        public static List<Tuple<string, double>> Terms()
+        public static List<Tuple<Term, double>> Terms()
         {
             var reader = IndexReader.Open(_directory, false);
-            DefaultSimilarity similarity = new DefaultSimilarity();
-            var indexSearcher = new IndexSearcher(_directory, false);
             int docnum = reader.NumDocs();
-            var tfIdfs = new List<Tuple<string, double>>();
+            var tfIdfs = new List<Tuple<Term, double>>();
 
-            TermEnum terms = reader.Terms();
-            while (terms.Next())
+            var terms = reader.Terms().ToList();
+            foreach (var term in terms)
             {
-                Term term = terms.Term;
                 String termText = term.Text;
                 float docFrequency = reader.DocFreq(term);
-                var termDocs = reader.TermDocs(term);
+                var termDocs = reader.TermDocs(term).ToList();
                 float totalFrequency = 0;
                 if (termDocs != null)
                 {
-                    while (termDocs.Next())
-                    {
-                        totalFrequency += termDocs.Freq;
-                    }
+                    totalFrequency += termDocs.Sum(s => s.Freq);
                 }
 
                 double idf = Math.Log(docnum/docFrequency);
                 double tfIdf = totalFrequency * idf;
 
-                tfIdfs.Add(new Tuple<string, double>(termText, tfIdf));
+                tfIdfs.Add(new Tuple<Term, double>(term, tfIdf));
             }
             reader.Close();
             tfIdfs = tfIdfs.OrderByDescending(s => s.Item2).ToList();
             return tfIdfs;
+        }
+
+        public static void AssosiationWithoutDistance()
+        {
+            var reader = IndexReader.Open(_directory, false);
+            int docnum = reader.NumDocs();
+            var terms = Terms().ToList().Take(200).Select(s => s.Item1);
+            var result = new List<Tuple<string, string>>();
+            foreach (var term1 in terms)
+            {
+                var otherTerms = terms.Where(s => !s.Equals(term1));
+                var term1Docs = reader.TermDocs(term1).ToList();
+                foreach (var term2 in otherTerms)
+                {
+                    var term2Docs = reader.TermDocs(term2).ToList();
+                    var colocatingDocuments = term1Docs.Intersect(term2Docs);
+                    //result.Add(new Tuple<term1., string>());
+
+                }
+
+
+
+            }
+
+        }
+
+        private static List<Term> ToList(this TermEnum input)
+        {
+            var list = new List<Term>();
+            while (input.Next())
+            {
+                list.Add(input.Term);
+            }
+            return list;
+        }
+
+        private static List<TermDocs> ToList(this TermDocs input)
+        {
+            var list = new List<TermDocs>();
+            while (input.Next())
+            {
+                list.Add(input);
+            }
+            return list;
         }
     }
 }

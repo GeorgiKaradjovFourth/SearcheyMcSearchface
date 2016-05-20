@@ -49,7 +49,7 @@ namespace SearcheyMcSearchface.Controllers
                 }
                 var document = new Document
                 {
-                    Header = file.Substring(file.LastIndexOf('\\') + 2),
+                    Header = file.Substring(file.LastIndexOf('\\') + 1, file.Length - file.LastIndexOf('\\') - 6),
                     Text = text,
                     Source = SourceType.UserManual
                 };
@@ -85,6 +85,12 @@ namespace SearcheyMcSearchface.Controllers
 
             LuceneSearch.AddUpdateLuceneIndex(docs);
 
+            return null;
+        }
+
+        public ActionResult CleanIndex()
+        {
+            LuceneSearch.ClearLuceneIndex();
             return null;
         }
 
