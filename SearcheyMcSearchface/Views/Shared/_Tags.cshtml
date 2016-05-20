@@ -6,7 +6,7 @@
         foreach (Tag tag in @Model)
         {
             string labelType = tag.TfIdf > 120 ? "label label-primary" : "label label-default";
-            <span class="@labelType">@tag.Text</span>
+            <span class="@labelType">@Html.ActionLink(@tag.Text, "Search", "Search", new { tag.Text }, new { style = "color:white" })</span>
         }
     }
 </div>

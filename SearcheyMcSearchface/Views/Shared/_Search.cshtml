@@ -1,5 +1,13 @@
 ﻿@model SearcheyMcSearchface.Models.SearchViewModel
 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (IsAjax)
+    {
+        Layout = null;
+    }
+}
+
 <div id="search">
     @using (Ajax.BeginForm("Search", "Search", new AjaxOptions { UpdateTargetId = "search", HttpMethod = "GET"}))
     {

@@ -5,7 +5,12 @@
         @Model.Header
     </p>
     <div class="small text-muted">@Model.Text</div>
-    @Html.Partial("_Tags", @Model.Tags)
+    <br />
+    @if (@Model.Tags != null)
+    {
+        @Html.Partial("_Tags", @Model.Tags)
+    }
+    <br/>
     @Html.ActionLink("Show More...", "Index", new { controller = "Document", Id = @Model.DocumentId }, new { target = "_blank" })
     <hr />
 </div>
