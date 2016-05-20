@@ -69,6 +69,10 @@
     <Compile Include="Migrations\201605200929291_Add tag-relations table.Designer.cs">
       <DependentUpon>201605200929291_Add tag-relations table.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605200955591_Tag relations tbe.cs" />
+    <Compile Include="Migrations\201605200955591_Tag relations tbe.Designer.cs">
+      <DependentUpon>201605200955591_Tag relations tbe.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="SearcheyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,6 +87,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605200929291_Add tag-relations table.resx">
       <DependentUpon>201605200929291_Add tag-relations table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605200955591_Tag relations tbe.resx">
+      <DependentUpon>201605200955591_Tag relations tbe.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
