@@ -1,0 +1,35 @@
+﻿@using SearcheyData.Entities
+@model SearcheyMcSearchface.Models.DocumentViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model == null)
+{
+    <div>Invalid document number</div>
+}
+else
+{
+    <h2>@Model.Header</h2>
+    <br/>
+    <div style="white-space: pre-wrap;">
+        @Model.Text
+    </div>
+    @Html.Partial("_Tags", @Model.Tags)
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-3">Source</div>
+        <div class="col-md-3">@Model.Source.ToString()</div>
+        <div class="col-md-9">@Model.URL</div>
+    </div>
+
+
+    <div>Related Documents:</div>
+    foreach (Document doc in Model.RelatedDocuments)
+    {
+        <div>@Html.ActionLink(@doc.Header, "Index", @doc.Id)</div>
+    }
+}
+
+

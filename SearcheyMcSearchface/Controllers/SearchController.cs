@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SearcheyData.Entities;
 using SearcheyMcSearchface.Models;
 
 namespace SearcheyMcSearchface.Controllers
@@ -16,7 +17,10 @@ namespace SearcheyMcSearchface.Controllers
             return PartialView();
         }
 
-        // GET: Search/Text
+        private const int SHOW_FIRST_CHARACTERS = 255;
+        private const int SHOW_FIRST_DOCUMENTS_COUNT = 20;
+
+        // GET: Search/Text/
         public ActionResult Search(string text)
         {
             var result = LuceneSearch.Search(text);
@@ -25,10 +29,12 @@ namespace SearcheyMcSearchface.Controllers
             model.Text = text;
             model.Results = result.Select(s => new SearchResultViewModel
             {
-                Text = s.Text,
+                DocumentId = s.Id,
+                Text = s.Text.Length > SHOW_FIRST_CHARACTERS ? s.Text.Substring(0, SHOW_FIRST_CHARACTERS) : s.Text,
                 Header = s.Header,
-                Source = s.Source
-            }).ToList();
+                Source = s.Source,
+                Tags = new List<Tag>()
+            }).Take(SHOW_FIRST_DOCUMENTS_COUNT).ToList();
 
             return PartialView("_Search", model);
         }

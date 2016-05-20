@@ -12,9 +12,6 @@ namespace SearcheyMcSearchface.Controllers
     {
         public ActionResult Index()
         {
-            var ctx = new SearcheyContext();
-            ctx.Documents.Add(new Document() {Header = "Test", Text = "Test Text"});
-            ctx.SaveChanges();
             return View();
         }
 

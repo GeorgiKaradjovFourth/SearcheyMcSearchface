@@ -7,16 +7,7 @@
     <div class="caption">
         Text: @Model.Text
     </div>
-
-    <div class="row">
-        Tags:
-        @if (@Model.Tags != null)
-        {
-            foreach (string tag in @Model.Tags)
-            {
-                <div class="col-sm-offset-1">@tag</div>
-            }
-        }
-    </div>
-    <br />
+    @Html.Partial("_Tags", @Model.Tags)
+    @Html.ActionLink("Show More...", "Index", new { controller = "Document", Id = @Model.DocumentId }, new { target = "_blank" })
+    <hr />
 </div>

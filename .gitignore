@@ -210,3 +210,6 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+SearcheyMcSearchface/lucene_index/_0.cfs
+SearcheyMcSearchface/lucene_index/segments.gen
+SearcheyMcSearchface/lucene_index/segments_2
