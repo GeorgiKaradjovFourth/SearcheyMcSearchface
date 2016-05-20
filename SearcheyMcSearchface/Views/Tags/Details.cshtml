@@ -1,42 +1,27 @@
-﻿@model SearcheyData.Entities.Tag
+﻿@model SearcheyMcSearchface.Models.ExploreTagViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
-
 <div>
-    <h4>Tag</h4>
+    <h2>@Html.DisplayFor(model => model.MainTag.Text)</h2>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Text)
-        </dt>
+    
 
-        <dd>
-            @Html.DisplayFor(model => model.Text)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TermFrequency)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TermFrequency)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TfIdf)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TfIdf)
-        </dd>
-
-    </dl>
+    @foreach (var rt in @Model.RelatedTags)
+    {
+        @Html.ActionLink(rt.Text, "Details", new { id = rt.Id }, new { @class = "btn btn-info" }) @Html.Raw(" ")
+    }
+    <hr/>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Search by tag", "Search", "Search", new { text = Model.MainTag.Text },new {@class="btn btn-info"})
+    @Html.ActionLink("Back to List", "Index",null, new {@class="btn btn-info"})
 </p>
+
+<style>
+    .label-infoh2 {
+        margin-bottom: 40px !important
+    }
+</style>

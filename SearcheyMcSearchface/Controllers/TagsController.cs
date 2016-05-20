@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Lucene.Net.Search;
 using SearcheyData;
 using SearcheyData.Entities;
 using SearcheyMcSearchface.Models;
@@ -30,11 +31,20 @@ namespace SearcheyMcSearchface.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Tag tag = db.Tags.Find(id);
+            var relatedTags = new List<Tag>(); 
+            relatedTags.AddRange(db.TagRelations.Where(s => s.Tag1.Id == tag.Id).OrderByDescending(o => o.Relation).Select(t => t.Tag2).ToList());
+            relatedTags.AddRange(db.TagRelations.Where(s => s.Tag2.Id == tag.Id).OrderByDescending(o => o.Relation).Select(t => t.Tag1).ToList());
+
+            ExploreTagViewModel model = new ExploreTagViewModel
+            {
+                MainTag = tag,
+                RelatedTags = relatedTags
+            };
             if (tag == null)
             {
                 return HttpNotFound();
             }
-            return View(tag);
+            return View(model);
         }
 
         // GET: Tags/Create

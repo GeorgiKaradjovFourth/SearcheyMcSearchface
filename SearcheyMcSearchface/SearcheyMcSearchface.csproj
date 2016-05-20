@@ -400,6 +400,7 @@
     <Compile Include="LuceneSearch.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\DocumentViewModel.cs" />
+    <Compile Include="Models\ExploreTagViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\SearchResultViewModel.cs" />
