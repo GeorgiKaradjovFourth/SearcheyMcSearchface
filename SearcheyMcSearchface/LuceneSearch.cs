@@ -11,6 +11,7 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Search.Similar;
 using Lucene.Net.Store;
+using SearcheyData;
 using SearcheyDocument = SearcheyData.Entities.Document;
 using LuceneVersion = Lucene.Net.Util.Version;
 
@@ -221,11 +222,13 @@ namespace SearcheyMcSearchface
 
         public static IEnumerable<SearcheyDocument> MoreLikeThis(int documentId, int count)
         {
+            var firstDoc = new SearcheyContext().Documents.FirstOrDefault();
+            var firstId = firstDoc == null ? 0 : firstDoc.Id;
             var reader = IndexReader.Open(_directory, false);
             var indexSearcher = new IndexSearcher(_directory, false);
             MoreLikeThis mlt = new MoreLikeThis(reader); // Pass the index reader
             mlt.SetFieldNames(new[] { "Id", "Header", "Text" });
-            var query = mlt.Like(documentId - 306/* Its hackday after all */);
+            var query = mlt.Like(documentId - firstId);
             var hits = indexSearcher.Search(query, null, count, Sort.RELEVANCE).ScoreDocs;
             var result = _mapLuceneToDataList(hits, indexSearcher);
             return result;
@@ -246,10 +249,10 @@ namespace SearcheyMcSearchface
                 float totalFrequency = 0;
                 if (termDocs != null)
                 {
-                    totalFrequency += termDocs.Sum(s => s.Freq);
+                    totalFrequency += termDocs.Sum(s => s.Item2);
                 }
 
-                double idf = Math.Log(docnum/docFrequency);
+                double idf = Math.Log(docnum / docFrequency);
                 double tfIdf = totalFrequency * idf;
 
                 tfIdfs.Add(new Tuple<Term, double>(term, tfIdf));
@@ -259,46 +262,51 @@ namespace SearcheyMcSearchface
             return tfIdfs;
         }
 
-        public static void AssosiationWithoutDistance()
+        public static List<Tuple<string, string, float>> AssosiationWithoutDistance()
         {
             var reader = IndexReader.Open(_directory, false);
-            int docnum = reader.NumDocs();
-            var terms = Terms().ToList().Take(200).Select(s => s.Item1);
-            var result = new List<Tuple<string, string>>();
+            float docnum = reader.NumDocs();
+            var terms = Terms().Take(200).Select(s => s.Item1);
+            var result = new List<Tuple<string, string, float>>();
             foreach (var term1 in terms)
             {
                 var otherTerms = terms.Where(s => !s.Equals(term1));
-                var term1Docs = reader.TermDocs(term1).ToList();
+                var term1Docs = reader.TermDocs(term1).ToList().Select(s => s.Item1);
                 foreach (var term2 in otherTerms)
                 {
-                    var term2Docs = reader.TermDocs(term2).ToList();
-                    var colocatingDocuments = term1Docs.Intersect(term2Docs);
-                    //result.Add(new Tuple<term1., string>());
+                    var docs = term1Docs.Select(s => s);
 
+                    var term2Docs = reader.TermDocs(term2).ToList().Select(s => s.Item1);
+                    float colocatingDocuments = docs.Intersect(term2Docs).Count();
+                    float colocationIndex = colocatingDocuments / docnum;
+                    if (colocationIndex > 0.4)
+                    {
+                        result.Add(new Tuple<string, string, float>(term1.Text, term2.Text, colocationIndex));
+                    }
                 }
-
-
-
             }
+
+            return result;
 
         }
 
         private static List<Term> ToList(this TermEnum input)
         {
             var list = new List<Term>();
-            while (input.Next())
+            var iterable = input;
+            while (iterable.Next())
             {
-                list.Add(input.Term);
+                list.Add(iterable.Term);
             }
             return list;
         }
 
-        private static List<TermDocs> ToList(this TermDocs input)
+        private static List<Tuple<int, int>> ToList(this TermDocs iterableinput)
         {
-            var list = new List<TermDocs>();
-            while (input.Next())
+            var list = new List<Tuple<int, int>>();
+            while (iterableinput.Next())
             {
-                list.Add(input);
+                list.Add(new Tuple<int, int>(iterableinput.Doc, iterableinput.Freq));
             }
             return list;
         }

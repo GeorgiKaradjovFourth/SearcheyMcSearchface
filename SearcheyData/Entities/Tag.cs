@@ -15,7 +15,7 @@ namespace SearcheyData.Entities
 
         public virtual Tag Parent { get; set; }
         public int? TermFrequency { get; set; }
-        public int? TfIdf { get; set; }
+        public double? TfIdf { get; set; }
 
         public virtual ICollection<Document> Documents { get; set; } 
     }

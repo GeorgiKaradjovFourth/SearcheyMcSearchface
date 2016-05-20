@@ -60,6 +60,15 @@
     <Compile Include="Entities\Document.cs" />
     <Compile Include="Entities\SourceType.cs" />
     <Compile Include="Entities\Tag.cs" />
+    <Compile Include="Entities\TagRelations.cs" />
+    <Compile Include="Migrations\201605200902227_Update field.cs" />
+    <Compile Include="Migrations\201605200902227_Update field.Designer.cs">
+      <DependentUpon>201605200902227_Update field.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605200929291_Add tag-relations table.cs" />
+    <Compile Include="Migrations\201605200929291_Add tag-relations table.Designer.cs">
+      <DependentUpon>201605200929291_Add tag-relations table.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="SearcheyContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,6 +76,14 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201605200902227_Update field.resx">
+      <DependentUpon>201605200902227_Update field.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605200929291_Add tag-relations table.resx">
+      <DependentUpon>201605200929291_Add tag-relations table.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

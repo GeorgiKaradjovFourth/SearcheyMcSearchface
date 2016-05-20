@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
@@ -20,13 +21,6 @@ namespace SearcheyMcSearchface.Controllers
         public ActionResult Index()
         {
             return View();
-        }
-
-
-        public ActionResult MostImportantTerms()
-        {
-            var terms = TextUtils.GetTfIDFTerms(100, new List<string>());
-            return View(terms);
         }
 
         //TODO: Handle tables and headers
@@ -73,7 +67,7 @@ namespace SearcheyMcSearchface.Controllers
                 }
                 Console.WriteLine();
             }
-            
+
 
             return null;
         }
@@ -94,12 +88,50 @@ namespace SearcheyMcSearchface.Controllers
             return null;
         }
 
-        public ActionResult GetMostImportantTerms()
+        public ActionResult MostImportantTerms()
         {
             var ctx = new SearcheyContext();
             var terms = LuceneSearch.Terms();
-
+            ctx.Tags.AddRange(terms.Select(s => new Tag
+            {
+                Text = s.Item1.Text,
+                TfIdf = s.Item2
+            }));
+            ctx.SaveChanges();
             return View();
+        }
+
+        public ActionResult Colocations()
+        {
+
+            var ctx = new SearcheyContext();
+            var col = LuceneSearch.AssosiationWithoutDistance();
+            foreach (var colocation in col)
+            {
+                var tag1 = ctx.Tags.Where(t => t.Text == colocation.Item1);
+            }
+            return null;
+        }
+
+        public ActionResult MatchTagsToDocuments()
+        {
+            var ctx = new SearcheyContext();
+            var allDocuments = ctx.Documents.ToList();
+            var allTags = ctx.Tags.ToList();
+
+            foreach (var document in allDocuments)
+            {
+                foreach (var tag in allTags)
+                {
+                    if (document.Text.Contains(tag.Text))
+                    {
+                        document.Tags.Add(tag);
+                    }
+                }
+                ctx.SaveChanges();
+            }
+
+            return null;
         }
     }
 }

@@ -29,5 +29,7 @@ namespace SearcheyMcSearchface.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<SearcheyData.Entities.Tag> Tags { get; set; }
     }
 }
