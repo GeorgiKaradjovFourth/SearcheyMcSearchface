@@ -29,8 +29,6 @@ namespace SearcheyMcSearchface.Controllers
                 Text = doc.Text,
                 URL = doc.URL
             };
-
-            
             
             return View(model);
         }

@@ -1,13 +1,16 @@
 ﻿@model SearcheyMcSearchface.Models.SearchResultViewModel
 
-<div>
-    <div class="caption">
-        Header: @Model.Header
-    </div>
-    <div class="caption">
-        Text: @Model.Text
-    </div>
-    @Html.Partial("_Tags", @Model.Tags)
+<div class="panel">
+    <p class="small text-primary text-uppercase" style="text-transform: uppercase;">
+        @Model.Header
+    </p>
+    <div class="small text-muted">@Model.Text</div>
+    <br />
+    @if (@Model.Tags != null)
+    {
+        @Html.Partial("_Tags", @Model.Tags)
+    }
+    <br/>
     @Html.ActionLink("Show More...", "Index", new { controller = "Document", Id = @Model.DocumentId }, new { target = "_blank" })
     <hr />
 </div>

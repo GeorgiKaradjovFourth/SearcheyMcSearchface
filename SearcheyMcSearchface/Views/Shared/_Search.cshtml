@@ -1,5 +1,13 @@
 ﻿@model SearcheyMcSearchface.Models.SearchViewModel
 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (IsAjax)
+    {
+        Layout = null;
+    }
+}
+
 <div id="search">
     @using (Ajax.BeginForm("Search", "Search", new AjaxOptions { UpdateTargetId = "search", HttpMethod = "GET"}))
     {
@@ -10,10 +18,11 @@
 
     @if (Model.Results != null)
     {
-        <div>Results for @Model.Text :</div>
-        foreach (var result in Model.Results)
+        <div style="margin-top: 50px;">
+        @foreach (var result in Model.Results)
         {
-            @Html.Partial("_SearchResult", result)
+            @Html.Partial("_SearchResult", result);
         }
+        </div>
     }
 </div>

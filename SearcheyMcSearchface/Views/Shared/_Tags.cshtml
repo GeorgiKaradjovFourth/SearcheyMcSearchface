@@ -1,13 +1,12 @@
 ﻿@using SearcheyData.Entities
 @model ICollection<SearcheyData.Entities.Tag>
-
 <div class="row">
-    Tags:
     @if (@Model != null)
     {
         foreach (Tag tag in @Model)
         {
-            <div class="col-sm-offset-1">@tag</div>
+            string labelType = tag.TfIdf > 120 ? "label label-primary" : "label label-default";
+            <span class="@labelType">@Html.ActionLink(@tag.Text, "Search", "Search", new { tag.Text }, new { style = "color:white" })</span>
         }
     }
 </div>
