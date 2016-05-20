@@ -10,26 +10,29 @@
 }
 else
 {
-    <h2>@Model.Header</h2>
-    <br/>
-    <div style="white-space: pre-wrap;">
+    <h2 class="text-center">@Model.Header</h2>
+    <div style="white-space: pre-wrap;" class="container">
         @Model.Text
     </div>
     @Html.Partial("_Tags", @Model.Tags)
     <hr/>
 
-    <div class="row">
-        <div class="col-md-3">Source</div>
-        <div class="col-md-3">@Model.Source.ToString()</div>
-        <div class="col-md-9">@Model.URL</div>
+    <div>Source:
+        <span class="label label-info">@Model.Source.ToString()</span>
+        <span class="label label-info">@Model.URL</span>
     </div>
+    <br/>
 
-
-    <div>Related Documents:</div>
-    foreach (Document doc in Model.RelatedDocuments)
-    {
-        <div>@Html.ActionLink(@doc.Header, "Index", "Document", new{ Id = @doc.Id }, null)</div>
-    }
+    <div class="h4">Related Documents:</div>
+    <br/>
+    <ul>
+        @foreach (Document doc in Model.RelatedDocuments)
+        {
+        <li>
+             @Html.ActionLink(@doc.Header, "Index", "Document", new {Id = @doc.Id}, null)
+        </li>
+        }
+    </ul>
 }
 
 

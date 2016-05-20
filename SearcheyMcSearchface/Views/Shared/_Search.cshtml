@@ -2,27 +2,27 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    if (IsAjax)
+    if (IsAjax || Model.Results == null)
     {
         Layout = null;
     }
 }
 
-<div id="search">
-    @using (Ajax.BeginForm("Search", "Search", new AjaxOptions { UpdateTargetId = "search", HttpMethod = "GET"}))
+<div id="search" style="margin-top: 20px;">
+    @using (Ajax.BeginForm("Search", "Search", new AjaxOptions { UpdateTargetId = "search", HttpMethod = "GET" }))
     {
         @Html.EditorFor(m => m.Text)
-
-        <input type="submit" name="SearchButton" value="Search" />
+        <input type="submit" name="SearchButton" value="Search"/>
     }
 
     @if (Model.Results != null)
     {
-        <div style="margin-top: 50px;">
-        @foreach (var result in Model.Results)
-        {
-            @Html.Partial("_SearchResult", result);
-        }
+        <div style="margin-top: 40px;">
+            @foreach (var result in Model.Results)
+            {
+                @Html.Partial("_SearchResult", result)
+                ;
+            }
         </div>
     }
 </div>
