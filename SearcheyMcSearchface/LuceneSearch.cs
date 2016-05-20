@@ -225,7 +225,7 @@ namespace SearcheyMcSearchface
             var indexSearcher = new IndexSearcher(_directory, false);
             MoreLikeThis mlt = new MoreLikeThis(reader); // Pass the index reader
             mlt.SetFieldNames(new[] { "Id", "Header", "Text" });
-            var query = mlt.Like(documentId);
+            var query = mlt.Like(documentId - 306/* Its hackday after all */);
             var hits = indexSearcher.Search(query, null, count, Sort.RELEVANCE).ScoreDocs;
             var result = _mapLuceneToDataList(hits, indexSearcher);
             return result;

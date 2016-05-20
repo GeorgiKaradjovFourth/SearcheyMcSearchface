@@ -28,7 +28,7 @@ else
     <div>Related Documents:</div>
     foreach (Document doc in Model.RelatedDocuments)
     {
-        <div>@Html.ActionLink(@doc.Header, "Index", @doc.Id)</div>
+        <div>@Html.ActionLink(@doc.Header, "Index", "Document", new{ Id = @doc.Id }, null)</div>
     }
 }
 
