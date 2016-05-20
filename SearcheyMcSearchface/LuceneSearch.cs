@@ -219,15 +219,50 @@ namespace SearcheyMcSearchface
             return _mapLuceneToDataList(docs);
         }
 
-        public static IEnumerable<SearcheyDocument> MoreLikeThis(string input)
+        public static IEnumerable<SearcheyDocument> MoreLikeThis(int documentId, int count)
         {
             var reader = IndexReader.Open(_directory, false);
+            var indexSearcher = new IndexSearcher(_directory, false);
             MoreLikeThis mlt = new MoreLikeThis(reader); // Pass the index reader
-            mlt.SetFieldNames(new[] {  "Header", "Text" });
-            //var similarity = IndexReader.
-           // var query = mlt.Like(new System.IO.StringReader(similarity));
-            // Do handling
-            return null;
+            mlt.SetFieldNames(new[] { "Id", "Header", "Text" });
+            var query = mlt.Like(documentId);
+            var hits = indexSearcher.Search(query, null, count, Sort.RELEVANCE).ScoreDocs;
+            var result = _mapLuceneToDataList(hits, indexSearcher);
+            return result;
+        }
+
+        public static List<Tuple<string, double>> Terms()
+        {
+            var reader = IndexReader.Open(_directory, false);
+            DefaultSimilarity similarity = new DefaultSimilarity();
+            var indexSearcher = new IndexSearcher(_directory, false);
+            int docnum = reader.NumDocs();
+            var tfIdfs = new List<Tuple<string, double>>();
+
+            TermEnum terms = reader.Terms();
+            while (terms.Next())
+            {
+                Term term = terms.Term;
+                String termText = term.Text;
+                float docFrequency = reader.DocFreq(term);
+                var termDocs = reader.TermDocs(term);
+                float totalFrequency = 0;
+                if (termDocs != null)
+                {
+                    while (termDocs.Next())
+                    {
+                        totalFrequency += termDocs.Freq;
+                    }
+                }
+
+                double idf = Math.Log(docnum/docFrequency);
+                double tfIdf = totalFrequency * idf;
+
+                tfIdfs.Add(new Tuple<string, double>(termText, tfIdf));
+            }
+            reader.Close();
+            tfIdfs = tfIdfs.OrderByDescending(s => s.Item2).ToList();
+            return tfIdfs;
         }
     }
 }

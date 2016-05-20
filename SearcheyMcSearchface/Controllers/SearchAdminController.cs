@@ -87,5 +87,13 @@ namespace SearcheyMcSearchface.Controllers
 
             return null;
         }
+
+        public ActionResult GetMostImportantTerms()
+        {
+            var ctx = new SearcheyContext();
+            var terms = LuceneSearch.Terms();
+
+            return View();
+        }
     }
 }

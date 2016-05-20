@@ -32,5 +32,11 @@ namespace SearcheyMcSearchface.Controllers
 
             return PartialView("_Search", model);
         }
+
+        public ActionResult SearchResult(int id)
+        {
+            var moreLikeThis = LuceneSearch.MoreLikeThis(id, 5);
+            return View();
+        }
     }
 }
